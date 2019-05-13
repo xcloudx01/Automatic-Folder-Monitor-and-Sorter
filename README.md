@@ -10,12 +10,13 @@ Fully customizable to suit your needs!
 
 
 ## Initial Setup
-1. Download and install 7zip or easy-7Zip
-2. Open the .ahk file in a text editor.
-3. Change the "MonitoredFolder" value near the top of the script to point to the folder that you want to be monitored for changes.
-4. Change "HowOftenToScanInSeconds" To how often it should check if anything within the folder has changed.
-5. Change the "7ZipLocation" to point to where your 7zip's 7z.exe is.
-6. Under the "Destination folders" section, you can change where files that match a specific file type will be placed. Eg MoveImagesTo = %MonitoredFolder%\Images
+1. Download and install 7zip or easy-7Zip (http://www.e7z.org/free-download.htm)
+2. Download and install AutoHotKey (https://www.autohotkey.com/download/)
+3. Open the .ahk file in a text editor.
+4. Change the "MonitoredFolder" value near the top of the script to point to the folder that you want to be monitored for changes.
+5. Change "HowOftenToScanInSeconds" To how often it should check if anything within the folder has changed.
+6. Change the "7ZipLocation" to point to where your 7zip's 7z.exe is.
+7. Under the "Destination folders" section, you can change where files that match a specific file type will be placed. Eg MoveImagesTo = %MonitoredFolder%\Images
 
 ## Adding more file types to a category
 1. Under the "File types" heading, add any extensions that you particularly want to be assigned to a that category. Eg:	ZipExt := ["zip","7z","rar","r00","001"] could become 		ZipExt := ["zip","7z","rar","r00","001","NEWEXT1","NEWEXT2","NEWEXT3"]

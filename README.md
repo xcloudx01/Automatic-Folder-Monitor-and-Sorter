@@ -24,4 +24,4 @@ Fully customizable to suit your needs!
 1. If you want more categories, add them under the "File types" section. Define the name of the category, followed by a comma seperated list in brackets of extensions that that category should contain. Eg: ZipExt := ["zip","7z","rar","r00","001"]
 2. And then under the "Media files" section, add	ScanForChangedFiles(CATEGORY_NAME,TARGET_FOLDER,OverWrite) onto a new line.
 3. Change CATEGORY_Name to what you just named your custom category.
-4. Change TARGET_FOLDER to where you'd like them to go. Eg: "C:\Downloads\" or you can use "%MonitoredFolder%\MyCustomCategory" To make them go to a folder called "MyCustomCategory" that's within your monitored folder.
+4. Change TARGET_FOLDER to where you'd like them to go. Eg: "C:\Downloads\" (without quotes) or you can use "%MonitoredFolder%\MyCustomCategory" (without quotes) To make them go to a folder called "MyCustomCategory" that's within your monitored folder.

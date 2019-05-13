@@ -1,8 +1,9 @@
 # Automatic Folder Monitor & File Sorter
 ## Overview:
 
-This tool takes the hastle out of manually sorting your downloads folder, or any other folder you tend to just throw files into.
-It will move files of a specific extention to a specified subfolder. It will also auto-unzip any zipped files for you.
+This tool takes the hassle out of manually sorting your downloads folder, or any other folder you tend to just throw files into.
+It will move files that fall under a category to a specified subfolder. It will also auto-unzip any zipped files for you.
+So you can assign a bulk set of image extensions, and any time the script sees one in your monitored folder, it will move it to your "Images" folder.
 Eg: photo.jpg > Photos folder\photo.jpg. ZipFile.7z > ZipFile\*.*
 
 Fully customizable to suit your needs!
@@ -21,6 +22,6 @@ Fully customizable to suit your needs!
 
 ## Adding custom categories
 1. If you want more categories, add them under the "File types" section. Define the name of the category, followed by a comma seperated list in brackets of extensions that that category should contain. Eg: ZipExt := ["zip","7z","rar","r00","001"]
-2. And then under the "Media files" section, add	ScanForChangedFiles(CATEGORY_NAME,TARGET_FOLDER,OverWrite)
+2. And then under the "Media files" section, add	ScanForChangedFiles(CATEGORY_NAME,TARGET_FOLDER,OverWrite) onto a new line.
 3. Change CATEGORY_Name to what you just named your custom category.
-4. Change TARGET_FOLDER to where you'd like them to go. Eg: "C:\Downloads\" Or, you can use "%MonitoredFolder%\MyCustomCategory" To make them go to a folder called "MyCustomCategory" that's within your monitored folder.
+4. Change TARGET_FOLDER to where you'd like them to go. Eg: "C:\Downloads\" or you can use "%MonitoredFolder%\MyCustomCategory" To make them go to a folder called "MyCustomCategory" that's within your monitored folder.

@@ -4,7 +4,7 @@
 This tool takes the hassle out of manually sorting your downloads folder, or any other folder you tend to just throw files into.
 It will move files that fall under a category to a specified subfolder. It will also auto-unzip any zipped files for you.
 So you can assign a bulk set of image extensions, and any time the script sees one in your monitored folder, it will move it to your "Images" folder.
-Eg: photo.jpg > Photos folder\photo.jpg. ZipFile.7z > ZipFile\*.*
+Eg: photo.jpg > Photos folder\photo.jpg. ZipFile.7z > ZipFile\ZipFileContents*.*
 
 Fully customizable to suit your needs!
 

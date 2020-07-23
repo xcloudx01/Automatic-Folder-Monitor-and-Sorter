@@ -34,7 +34,7 @@
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 ; Main
 ;---------------------------------------------------------------------------------------------------------------------------------------;
-;Start the folder monitor
+Start the folder monitor
 	WaitTimeBetweenScans := HowOftenToScanInSeconds * 1000
 	SetTimer, SearchFiles, %WaitTimeBetweenScans%
 	GoSub,SearchFiles ; Immediately do a scan

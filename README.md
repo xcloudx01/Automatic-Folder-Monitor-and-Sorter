@@ -14,15 +14,15 @@ Fully customizable to suit your needs!
 2. Download and install AutoHotKey (https://www.autohotkey.com/download/)
 3. Open the .ahk file in a text editor.
 4. Change the "MonitoredFolder" value near the top of the script to point to the folder that you want to be monitored for changes.
+5. Change "UnzipTo" value to point to where you want zip files to be unzipped to.
 5. Change "HowOftenToScanInSeconds" To how often it should check if anything within the folder has changed.
 6. Change the "7ZipLocation" to point to where your 7zip's 7z.exe is.
 7. Under the "Destination folders" section, you can change where files that match a specific file type will be placed. Eg MoveImagesTo = %MonitoredFolder%\Images
 
 ## Adding more file types to a category
-1. Under the "File types" heading, add any extensions that you particularly want to be assigned to a that category. Eg:	ZipExt := ["zip","7z","rar","r00","001"] could become 		ZipExt := ["zip","7z","rar","r00","001","NEWEXT1","NEWEXT2","NEWEXT3"]
+1. Starting on Line 27, add in the file extension to the list of file extensions on the PushFiletypeToArray command. Eg. "jpeg" and use a comma to seperate the entries.
 
 ## Adding custom categories
-1. If you want more categories, add them under the "File types" section. Define the name of the category, followed by a comma seperated list in brackets of extensions that that category should contain. Eg: ZipExt := ["zip","7z","rar","r00","001"]
-2. And then under the "Media files" section, add	ScanForChangedFiles(CATEGORY_NAME,TARGET_FOLDER,OverWrite) onto a new line.
-3. Change CATEGORY_Name to what you just named your custom category.
-4. Change TARGET_FOLDER to where you'd like them to go. Eg: "C:\Downloads\" (without quotes) or you can use "%MonitoredFolder%\MyCustomCategory" (without quotes) To make them go to a folder called "MyCustomCategory" that's within your monitored folder.
+1. Copy and paste this onto a new line just after the last one on line 32, and adjust the file types within the [ ] brackets, and label what folder they go into at the end to what you'd like to use.
+
+PushFiletypeToArray(FiletypeObjectArray,["exe","msi","cmd"], "FolderNameGoesHere")

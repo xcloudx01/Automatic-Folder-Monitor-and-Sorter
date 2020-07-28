@@ -15,6 +15,7 @@
 		HowOftenToScanInSeconds = 60 ;How long we wait before re-scanning the folder for any changes.
 		ToolTips = 1 ;Show helper popups showing what the program is doing.
 		OverWrite = 1 ;Overwrite duplicate files?
+		RemoveEmptyFolders = 1 ;Delete any folders in the monitored folder that are now empty. (recursive)
 
 	;Zip files
 		7ZipLocation = C:\Program Files\7-Zip\7z.exe ;Needed to provide unzipping functionality.
@@ -58,6 +59,8 @@ return
 				}
 		}
 	}
+	if RemoveEmptyFolders
+		RemoveEmptyFolders(MonitoredFolder)
 return
 
 ;---------------------------------------------------------------------------------------------------------------------------------------;
@@ -112,11 +115,30 @@ return
 		{
 			ifnotexist,%TheFolderDir%
 				FileCreateDir,%TheFolderDir%
-		}
+		}		
 		
-		RemoveToolTip:
-			SetTimer, RemoveToolTip, Off
-			ToolTip
+		RemoveEmptyFolders(Folder)
+		{
+			global Tooltips
+			Loop, %Folder%\*, 2, 1
+			{
+			  FL := ((FL<>"") ? "`n" : "" ) A_LoopFileFullPath
+				Sort, FL, R D`n ; Arrange folder-paths inside-out
+				Loop, Parse, FL, `n
+				{
+				  FileRemoveDir, %A_LoopField% ; Do not remove the folder unless is  empty
+				  If ! ErrorLevel
+					{
+					   Del := Del+1,  RFL := ((RFL<>"") ? "`n" : "" ) A_LoopField
+						if Tooltips
+						{
+							Tooltip,Removing empty folder %FL%
+							SetTimer, RemoveToolTip, 3000
+						}
+					}
+				}
+			}
+		}
 		return
 		
 	;Objects
@@ -144,5 +166,14 @@ return
 			}
 		return Destination
 }
+
+;---------------------------------------------------------------------------------------------------------------------------------------;
+; Subroutines
+;---------------------------------------------------------------------------------------------------------------------------------------;
+
+	RemoveToolTip:
+		SetTimer, RemoveToolTip, Off
+		ToolTip
+	return
 
 ^Esc::ExitApp

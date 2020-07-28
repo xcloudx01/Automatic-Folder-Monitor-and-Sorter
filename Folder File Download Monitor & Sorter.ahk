@@ -39,67 +39,11 @@
 	WaitTimeBetweenScans := HowOftenToScanInSeconds * 1000
 	SetTimer, SearchFiles, %WaitTimeBetweenScans%
 	GoSub,SearchFiles ; Immediately do a scan
-return
-
-	SearchFiles:
-	Loop, Files, %MonitoredFolder%\*
-	{
-		DestinationFolder := GetDestination(A_LoopFileFullPath)
-		if (DestinationFolder = "Compressed")
-			UnZip(A_LoopFileName,A_LoopFileDir,A_LoopFileFullPath)
-		else if DestinationFolder
-		{
-			DestinationFolder := MonitoredFolder . "\" . DestinationFolder
-			MakeFolderIfNotExist(DestinationFolder)
-			FileMove,%A_LoopFileFullPath%,%DestinationFolder%\*.*,%OverWrite% ; *.* is needed else it could be renamed to no extension! (If dest folder failed)
-				if Tooltips
-				{
-					Tooltip,Moving %A_LoopFileName% > %DestinationFolder%
-					SetTimer, RemoveToolTip, 3000
-				}
-		}
-	}
-	if RemoveEmptyFolders
-		RemoveEmptyFolders(MonitoredFolder)
-return
+	return
 
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 ; Functions
-;---------------------------------------------------------------------------------------------------------------------------------------;
-	UnZip(FileFullName,Dir,FullPath)
-	{
-		global 7ZipLocation ;Saves having to re-pass this dir each time you use this function.
-		global DeleteZipFileAfterExtract
-		global OpenExtractedZip
-		global Tooltips
-		global UnzipTo
-		global UnzipSuccessSound
-		
-		;Get filename
-			StringGetPos,ExtentPos,FileFullName,.,R
-			FileName := SubStr(FileFullName,1,ExtentPos)
-			if Tooltips
-			{
-				Tooltip,Unzipping %FileName% > %Dir%\%FileName%
-				SetTimer, RemoveToolTip, 3000
-			}
-			MakeFolderIfNotExist(UnzipTo . "\" . FileName)
-			Runwait, "%7ZipLocation%" x "%FullPath%" -o"%UnzipTo%\%FileName%"
-		sleep,2000
-		
-		IfExist %UnzipTo%\%FileName%
-		{
-			if DeleteZipFileAfterExtract
-				Filerecycle, %FullPath%
-			if OpenExtractedZip
-				run, %UnzipTo%\%FileName%
-			if UnzipSuccessSound
-				soundplay, *64
-		}
-		else
-			msgbox,,Oh Noes!,Something went wrong and I couldn't unzip %FileName% to %UnzipTo%\%FileName%
-	}
-	
+;---------------------------------------------------------------------------------------------------------------------------------------;	
 	;Utilities
 		HasVal(haystack, needle)
 		{
@@ -141,6 +85,69 @@ return
 		}
 		return
 		
+		FindZipFiles(Folder,GoalObjectDestination)
+		{
+			global FiletypeObjectArray
+			global MonitoredFolder
+			global Tooltips
+			i = 0
+			
+			loop % FiletypeObjectArray.Count() 
+			{
+				i ++
+				;Get a ref to the object that holds the array of extensions we want.
+					if FiletypeObjectArray[i].Destination != GoalObjectDestination						
+						continue
+					o := FiletypeObjectArray[i]
+				
+				;Unzip
+					if o ;Without this it may end up unzipping to the root of C drive? i THINK "" defaults to C:\ when using Loop Files
+					{
+						Loop, Files, %MonitoredFolder%\*.*,R
+						{
+							if HasVal(o.Extensions,A_LoopFileExt)
+								UnZip(A_LoopFileName,A_LoopFileDir,A_LoopFileFullPath)
+						}
+					}
+			}
+		}
+		return
+		
+		UnZip(FileFullName,Dir,FullPath)
+		{
+			global 7ZipLocation ;Saves having to re-pass this dir each time you use this function.
+			global DeleteZipFileAfterExtract
+			global OpenExtractedZip
+			global Tooltips
+			global UnzipTo
+			global UnzipSuccessSound
+			
+			;Get filename
+				StringGetPos,ExtentPos,FileFullName,.,R
+				FileName := SubStr(FileFullName,1,ExtentPos)
+				if Tooltips
+				{
+					Tooltip,Unzipping %FileName% > %Dir%\%FileName%
+					SetTimer, RemoveToolTip, 3000
+				}
+				MakeFolderIfNotExist(UnzipTo . "\" . FileName)
+				Runwait, "%7ZipLocation%" x "%FullPath%" -o"%UnzipTo%\%FileName%"
+			sleep,2000
+			
+			IfExist %UnzipTo%\%FileName%
+			{
+				if DeleteZipFileAfterExtract
+					Filerecycle, %FullPath%
+				if OpenExtractedZip
+					run, %UnzipTo%\%FileName%
+				if UnzipSuccessSound
+					soundplay, *64
+			}
+			else
+				msgbox,,Oh Noes!,Something went wrong and I couldn't unzip %FileName% to %UnzipTo%\%FileName%
+		}
+
+		
 	;Objects
 		PushFiletypeToArray(InputArray,FiletypesArray,Destination)
 		{
@@ -170,10 +177,33 @@ return
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 ; Subroutines
 ;---------------------------------------------------------------------------------------------------------------------------------------;
-
-	RemoveToolTip:
-		SetTimer, RemoveToolTip, Off
-		ToolTip
-	return
+	;Main
+		SearchFiles:
+		Loop, Files, %MonitoredFolder%\*
+		{
+			DestinationFolder := GetDestination(A_LoopFileFullPath)
+			if (DestinationFolder = "Compressed")
+				UnZip(A_LoopFileName,A_LoopFileDir,A_LoopFileFullPath)
+			else if DestinationFolder
+			{
+				DestinationFolder := MonitoredFolder . "\" . DestinationFolder
+				MakeFolderIfNotExist(DestinationFolder)
+				FileMove,%A_LoopFileFullPath%,%DestinationFolder%\*.*,%OverWrite% ; *.* is needed else it could be renamed to no extension! (If dest folder failed)
+					if Tooltips
+					{
+						Tooltip,Moving %A_LoopFileName% > %DestinationFolder%
+						SetTimer, RemoveToolTip, 3000
+					}
+			}
+		}
+		if RemoveEmptyFolders
+			RemoveEmptyFolders(MonitoredFolder)
+		FindZipFiles(MonitoredFolder,"Compressed")
+	
+	;Other
+		RemoveToolTip:
+			SetTimer, RemoveToolTip, Off
+			ToolTip
+		return
 
 ^Esc::ExitApp

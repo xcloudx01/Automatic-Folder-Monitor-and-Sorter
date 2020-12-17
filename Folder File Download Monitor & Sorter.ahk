@@ -12,6 +12,7 @@
 	;Behaviour
 		MonitoredFolder = D:\Downloads
 		UnzipTo = D:\Downloads\Compressed
+		UnzipToggle = True ;Toggle Unzip functionality
 		HowOftenToScanInSeconds = 60 ;How long we wait before re-scanning the folder for any changes.
 		ToolTips = 1 ;Show helper popups showing what the program is doing.
 		OverWrite = 1 ;Overwrite duplicate files?
@@ -179,10 +180,12 @@
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 	;Main
 		SearchFiles:
+		global UnzipToggle
 		Loop, Files, %MonitoredFolder%\*
 		{
 			DestinationFolder := GetDestination(A_LoopFileFullPath)
-			if (DestinationFolder = "Compressed")
+
+			if( UnzipToggle = True and DestinationFolder = "Compressed") 
 				UnZip(A_LoopFileName,A_LoopFileDir,A_LoopFileFullPath)
 			else if DestinationFolder
 			{
@@ -198,7 +201,9 @@
 		}
 		if RemoveEmptyFolders
 			RemoveEmptyFolders(MonitoredFolder)
-		FindZipFiles(MonitoredFolder,"Compressed")
+
+		if( UnzipToggle = True )
+			FindZipFiles(MonitoredFolder,"Compressed")
 	
 	;Other
 		RemoveToolTip:

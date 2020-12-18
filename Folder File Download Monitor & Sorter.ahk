@@ -12,7 +12,7 @@
 	;Behaviour
 		MonitoredFolder = D:\Downloads
 		UnzipTo = D:\Downloads\Compressed
-		UnzipToggle = True ;Toggle Unzip functionality
+		UnzipToggle = False ;Toggle Unzip functionality
 		HowOftenToScanInSeconds = 60 ;How long we wait before re-scanning the folder for any changes.
 		ToolTips = 1 ;Show helper popups showing what the program is doing.
 		OverWrite = 1 ;Overwrite duplicate files?

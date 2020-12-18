@@ -32,6 +32,8 @@
 		PushFiletypeToArray(FiletypeObjectArray,["mp3","flac","wav"], "Audio")
 		PushFiletypeToArray(FiletypeObjectArray,["avi","mpg","mpeg","mov","mp4","mkv","wmv"], "Videos")
 		PushFiletypeToArray(FiletypeObjectArray,["exe","msi","jar","cmd","bat","ahk"], "Programs")
+		PushFiletypeToArray(FiletypeObjectArray,["har"], "Network Inspection")
+		PushFiletypeToArray(FiletypeObjectArray,["log"], "Logs")
 
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 ; Main

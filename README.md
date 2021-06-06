@@ -26,3 +26,6 @@ Fully customizable to suit your needs!
 1. Copy and paste this onto a new line just after the last one on line 32, and adjust the file types within the [ ] brackets, and label what folder they go into at the end to what you'd like to use.
 
 PushFiletypeToArray(FiletypeObjectArray,["exe","msi","cmd"], "FolderNameGoesHere")
+
+## Known issues.
+1. Program may crash if attempting to unzip a file that is being stitched together currently by a download manager. This only tends to effect very large zip files.

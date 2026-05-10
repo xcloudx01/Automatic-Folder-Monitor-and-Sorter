@@ -6,13 +6,14 @@
 	SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	#SingleInstance Force
 	#Persistent
-	#NoTrayIcon
+	; #NoTrayIcon — enabled for visibility
 
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 ; User Variables
 ;---------------------------------------------------------------------------------------------------------------------------------------;
 	;Behaviour
 		MonitoredFolder = D:\Downloads
+		DefaultDestinationFolder = "" ; When set, sorted files go here instead of under the monitored folder. Set to "" to disable.
 		UnzipTo = D:\Downloads\Compressed
 		UnzipToggle = False ;Toggle Unzip functionality
 		HowOftenToScanInSeconds = 60 ;How long we wait before re-scanning the folder for any changes.
@@ -193,7 +194,11 @@
 				UnZip(A_LoopFileName,A_LoopFileDir,A_LoopFileFullPath)
 			else if DestinationFolder
 			{
-				DestinationFolder := MonitoredFolder . "\" . DestinationFolder
+				; Use absolute path directly if DefaultDestinationFolder is set, otherwise prepend monitored folder.
+				if (DefaultDestinationFolder != "")
+					DestinationFolder := DefaultDestinationFolder . "\" . DestinationFolder
+				else
+					DestinationFolder := MonitoredFolder . "\" . DestinationFolder
 				MakeFolderIfNotExist(DestinationFolder)
 				FileMove,%A_LoopFileFullPath%,%DestinationFolder%\*.*,%OverWrite% ; *.* is needed else it could be renamed to no extension! (If dest folder failed)
 					if Tooltips
@@ -215,4 +220,33 @@
 			ToolTip
 		return
 
+;---------------------------------------------------------------------------------------------------------------------------------------;
+; Tray Menu
+;---------------------------------------------------------------------------------------------------------------------------------------;
+Menu, Tray, NoStandard
+Menu, Tray, Add, &Pause Scan, PauseScan
+Menu, Tray, Add, &Reload Script, ReloadScript
+Menu, Tray, Add, E&xit, ExitFromTray
+Menu, Tray, Default, &Pause Scan
+Menu, Tray, Icon, shell32.dll, 4
+
+;---------------------------------------------------------------------------------------------------------------------------------------;
+; Hotkeys
+;---------------------------------------------------------------------------------------------------------------------------------------;
 ^Esc::ExitApp
+
+PauseScan:
+	Pause
+	ScanStatus := (GetKeyState("Pause", "T") ? "Paused" : "Resumed")
+	Tooltip, Scan %ScanStatus%
+	SetTimer, RemoveToolTip, 3000
+return
+
+ReloadScript:
+	Menu, Tray, Icon, shell32.dll, 3
+	Reload
+return
+
+ExitFromTray:
+	ExitApp
+return
